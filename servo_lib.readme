@@ -1,0 +1,145 @@
+Servo Library for OpenSCAD
+Created by Brad Kartchner (kartchnb@gmail.com)
+
+Version 2.0 - 26 Dec 2021
+   Completely rewritten for simplification and easier maintenance
+Version 1.0 - ???
+   Initial version
+
+This library is designed to make it easier to create designs incorporting 
+standard servos.
+
+Methods are provided to access dimensions for each servo and to generate models
+of them.
+
+A current list of supported servos can always be obtained by echoing the value
+of the ServoLib_ValidServoModels variable.  For example:
+   echo (ServoLib_ValidServoModels);
+
+As of version 2.0, the supported servo models are:
+   ["S3003 (Clone)", "MG90S (Clone)", "SG90 (Clone)", "GH-S37D"]
+
+
+
+-------------------------------------------------------------------------------
+METHODS
+The library provides the following methods:
+
+ServoLib_GenerateServo(servo_model)
+   Generates a basic model of the servo.  
+   The generated model is intended to be a guide for designing around servo 
+   hardware and is not photo-accurate by any means.
+
+ServoLib_GenerateScrewHolesOutline(servo_model)
+   Generates a 2D hole pattern for the servo's mounting screw holes.
+   This pattern can be extruded to create mounting screw holes in your model.
+
+
+
+-------------------------------------------------------------------------------
+FUNCTIONS
+The library provides the following functions:
+
+ServoLib_ServoModelIsValid(servo_model)
+   Returns true if servo_model is a recognized Servo Model Name.
+
+ServoLib_AftHeight(servo_model)
+   Returns the Aft Height of the specified servo model (see diagrams below).
+
+ServoLib_WingHeight(servo_model)
+   Returns the Wing Height of the specified servo model (see diagrams below).
+
+ServoLib_ForeHeight(servo_model)
+   Returns the Fore Height of the specified servo model (see diagrams below).
+
+ServoLib_AxleHeight(servo_model)
+   Returns the Axle Height of the specified servo model (see diagrams below).
+
+ServoLib_BodyWidth(servo_model)
+   Returns the Body Width of the specified servo model (see diagrams below).
+
+ServoLib_WingWidth(servo_model)
+   Returns the Wing Width of the specified servo model (see diagrams below).
+
+ServoLib_AxleOffset(servo_model)
+   Returns the Axle Offset of the specified servo model (see diagrams below).
+
+ServoLib_AxleDiameter(servo_model)
+   Returns the Axle Diameter of the specified servo model (see diagrams below).
+
+ServoLib_BodyLength(servo_model)
+   Returns the Body Length of the specified servo model (see diagrams below).
+
+ServoLib_BodyHeight(servo_model)
+   Returns the Body Height of the specified servo model (see diagrams below).
+
+
+
+-------------------------------------------------------------------------------
+MEASUREMENT DESCRIPTIONS
+
+Height measurements
+(side view of motor)
+                                          V
+       ===============  --------------------
+             | | <- Axle Height          Horn Height (Axle height included)
+    --------------      ---              ---
+   |              |      Fore Height      ^
+===|              |=== <- Wing Height     |
+   |              |      ^               Body Height (sum)
+   |              |      | Aft Height     |
+   |              |      V                V
+    --------------      ---              ---
+
+
+
+Width measurements and axle offset
+(side view of motor)
+
+          Axle Offset (distance from center of axle to center of servo)
+           |<>|
+       ===============
+             | |
+    --------------
+   |              |
+===|              |===
+   |              |
+   |              |
+   |              |
+    --------------
+   |<-Body Width->|
+|<----Wing Width---->|
+
+
+
+Length measurements and axle diameter
+(front view of motor)
+
+================
+    ->| |<- Axle Diameter
+   ---------
+  |         |
+  |=========|
+  |         |
+  |         |
+  |         |
+   ---------
+  |<------->|
+  Body Length
+
+
+Screw hole measurements
+(top view of motor)
+
+ ------- 
+|   O   | ---
+|-------|  ^
+|       |  | <- Screw Y Offset (distance from center of motor)
+|       |  V
+|       | ---
+|       |
+|       |
+|-------|
+|   O   |      
+ -------
+    |<-->| <- Screw X Offset (distance from center of motor)
