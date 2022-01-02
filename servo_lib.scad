@@ -27,6 +27,11 @@ ServoLib_ValidServoModels = [ for (x = SERVOLIB_SERVO_PARAMETERS) x[0] ];
 
 
 
+// Define Iota, a small amount to be used to make differencing objects look better in preview
+ServoLib_Iota = 0.001;
+
+
+
 // Check if the specified servo model name is valid.
 function ServoLib_ServoModelIsValid(servo_model) =
 	let
@@ -119,8 +124,8 @@ module ServoLib_GenerateServo(servo_model)
 		}
 
 		// Drill out the screw holes
-		translate([0, 0, -axle_height - fore_height - wing_height - iota])
-		linear_extrude(wing_height + iota*2)
+		translate([0, 0, -axle_height - fore_height - wing_height - ServoLib_Iota])
+		linear_extrude(wing_height + ServoLib_Iota*2)
 			ServoLib_GenerateScrewHolesOutline(servo_model);
 	}
 }
