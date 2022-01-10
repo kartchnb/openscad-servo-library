@@ -1,5 +1,3 @@
-include<tabletools_lib/tabletools_lib.scad>
-
 // To add new servo models to this library:
 //   1) add a new source file for the servo in the "servos" folder
 //   2) In the new source file, define the servo parameters
