@@ -83,6 +83,10 @@ function ServoLib_BodyHeight(servo_model) =
 	ServoLib_WingHeight(servo_model) +
 	ServoLib_ForeHeight(servo_model);
 
+// Query the spline type of the specified servo model
+function ServoLib_SplineType(servo_model) =
+	_ServoLib_RetrieveParameter(servo_model, "spline type");
+
 
 
 // Generate a model of the specified servo

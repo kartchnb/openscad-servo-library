@@ -12,6 +12,7 @@ SERVOLIB_PARAMETERS_S3003_CLONE =
       ["axle offset", 10.15],
       ["axle diameter", 5.80],
       ["body length", 20.30],
+      ["spline type", "unknown"]
 
       [
         "mounting screw holes",
