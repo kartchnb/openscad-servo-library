@@ -188,14 +188,11 @@ function _ServoLib_RetrieveParameter(servo_model, key) =
 		value_index = search([key], servo_parameters) [0],
 		value = servo_parameters [value_index] [1]
 	)
-	_ServoLib_ReturnIfServoModelIsValid(servo_model, value);
-
-
-// Return the specified value if the servo model is valid
-function _ServoLib_ReturnIfServoModelIsValid(servo_model, value) =
-    ServoLib_ServoModelIsValid(servo_model)
-    ? value
-    : assert(false, str("Servo model \"", servo_model, "\" is not currently supported by servo_lib"));
+	ServoLib_ServoModelIsValid(servo_model) == false
+		? assert(false, str("Servo model \"", servo_model, "\" is not currently supported by servo_lib"))
+		: value_index == [] || value == undef 
+			? assert(false, str("Requested parameter \"", key, "\" not found for servo model \"", servo_model, "\""))
+			: value;
 
 
 

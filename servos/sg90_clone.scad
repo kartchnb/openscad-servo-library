@@ -12,7 +12,7 @@ SERVOLIB_PARAMETERS_SG90_CLONE =
       ["axle offset", 6.19],
       ["axle diameter", 4.00],
       ["body length", 12.38],
-      ["spline type", "20T"]
+      ["spline type", "20T"],
 
       [
         "mounting screw holes",

@@ -12,7 +12,7 @@ SERVOLIB_PARAMETERS_GH_S37D =
       ["axle offset", 4.60],
       ["axle diameter", 3.73],
       ["body length", 9.20],
-      ["spline type", "20T"]
+      ["spline type", "20T"],
 
       [
         "mounting screw holes",
