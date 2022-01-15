@@ -87,7 +87,7 @@ function ServoLib_BodyHeight(servo_model) =
 
 // Generate a model of the specified servo
 // The servo will be modeled entirely below the horizontal axes, with the center of the axle at [0, 0, 0]
-module ServoLib_GenerateServo(servo_model)
+module ServoLib_GenerateServo(servo_model, zcenter="axle top")
 {
 	body_width = ServoLib_BodyWidth(servo_model);
 	body_length = ServoLib_BodyLength(servo_model);
@@ -100,6 +100,16 @@ module ServoLib_GenerateServo(servo_model)
 	axle_diameter = ServoLib_AxleDiameter(servo_model);
 	axle_height = ServoLib_AxleHeight(servo_model);
 
+	x_offset = 0;
+	y_offset = 0;
+	z_offset =
+		zcenter == "axle base" || zcenter == "motor top" ? axle_height :
+		zcenter == "wing top" ? axle_height + fore_height :
+		zcenter == "wing bottom" ? axle_height + fore_height + wing_height :
+		zcenter == "motor base" ? axle_height + body_height :
+		0;
+
+	translate([x_offset, y_offset, z_offset])
 	difference()
 	{
 		union()

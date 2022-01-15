@@ -25,10 +25,19 @@ As of version 2.0, the supported servo models are:
 METHODS
 The library provides the following methods:
 
-ServoLib_GenerateServo(servo_model)
+ServoLib_GenerateServo(servo_model, zcenter)
    Generates a basic model of the servo.  
    The generated model is intended to be a guide for designing around servo 
    hardware and is not photo-accurate by any means.
+
+   zcenter determines where the motor is centered on the z-axis.
+   By default, the motor is generated with the top of the axle on the z-axis.
+   The following values are valid:
+      "axle top" or "top" - default centering
+      "axle base" or "motor top" - generates the top of the motor body on the z-axis
+      "wing top" - generates the top of the wings at the z-axis
+      "wing bottom" - generates the bottom of the wings at the z-axis
+      "motor bottom" - generates the entire motor above the z-axis
 
 ServoLib_GenerateScrewHolesOutline(servo_model)
    Generates a 2D hole pattern for the servo's mounting screw holes.
