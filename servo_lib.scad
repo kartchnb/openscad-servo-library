@@ -127,8 +127,6 @@ module ServoLib_GenerateServo(servo_model, xcenter, zcenter)
 		zcenter == "wing bottom" ? axle_height + fore_height + wing_height :
 		zcenter == "body base" || zcenter == "base" ? axle_height + body_height :
 		0;
-	echo(zcenter=zcenter);
-	echo(z_offset=z_offset);
 
 	translate([x_offset, y_offset, z_offset])
 	difference()
