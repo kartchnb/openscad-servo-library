@@ -90,9 +90,21 @@ function ServoLib_SplineType(servo_model) =
 
 
 // Generate a model of the specified servo
-// The servo will be modeled entirely below the horizontal axes, with the center of the axle at [0, 0, 0]
-module ServoLib_GenerateServo(servo_model, zcenter="axle top")
+// The generated motor is centered according to the xcenter and zcenter parameters
+// 
+// Horizontal centering (xcenter):
+// 	By default, the servo is centered, horizontally, on the axle
+//	An xcenter value of "body" will, instead, center on the middle of the body
+//
+// Vertical centering (zcenter):
+//  By default, the servo is generated with the top of the axle on the origin
+//  A zcenter value of "axle base" or "body top" will, instead, place the top of the servo body on the XY plane
+//  A zcenter value of "wing top" will place the top of the wings on the XY plane
+//  A zcenter value of "wing bottom" will place the bottom of the wings on the XY plane
+//  A zcenter value of "body base" or "base" will place the entire servo above the XY plane
+module ServoLib_GenerateServo(servo_model, xcenter = "axle", zcenter="axle top")
 {
+	// Gather motor dimensions
 	body_width = ServoLib_BodyWidth(servo_model);
 	body_length = ServoLib_BodyLength(servo_model);
 	body_height = ServoLib_BodyHeight(servo_model);
@@ -104,13 +116,16 @@ module ServoLib_GenerateServo(servo_model, zcenter="axle top")
 	axle_diameter = ServoLib_AxleDiameter(servo_model);
 	axle_height = ServoLib_AxleHeight(servo_model);
 
-	x_offset = 0;
+	// Calculate where to center the motor
+	x_offset = 
+		xcenter == "body" ? 0 :
+		-axle_offset;
 	y_offset = 0;
 	z_offset =
-		zcenter == "axle base" || zcenter == "motor top" ? axle_height :
+		zcenter == "axle base" || zcenter == "body top" ? axle_height :
 		zcenter == "wing top" ? axle_height + fore_height :
 		zcenter == "wing bottom" ? axle_height + fore_height + wing_height :
-		zcenter == "motor base" ? axle_height + body_height :
+		zcenter == "body base" || "base" ? axle_height + body_height :
 		0;
 
 	translate([x_offset, y_offset, z_offset])
@@ -118,27 +133,28 @@ module ServoLib_GenerateServo(servo_model, zcenter="axle top")
 	{
 		union()
 		{
-			// Offset the motor body to center on the axle
-			translate([-body_width/2 + axle_offset, 0, -axle_height])
+			translate([0, 0, -axle_height])
 			{
 				// Model the servo body
 				translate([-body_width/2, -body_length/2, -body_height])
 					cube([body_width, body_length, body_height]);
 
 				// Model the servo wings
-				translate([-wing_width/2, -body_length/2, -fore_height - wing_height])
-					cube([wing_width, body_length, wing_height]);
+				for (x_mirror = [0, 1])
+				mirror([x_mirror, 0, 0])
+				translate([body_width/2, -body_length/2, -fore_height - wing_height])
+					cube([(wing_width - body_width)/2, body_length, wing_height]);
 			}
 
 			// Model the axle
-			translate([0, 0, 0-axle_height])
+			translate([axle_offset, 0, 0-axle_height])
 				cylinder(d=axle_diameter, h=axle_height);
 		}
 
 		// Drill out the screw holes
 		translate([0, 0, -axle_height - fore_height - wing_height - ServoLib_Iota])
 		linear_extrude(wing_height + ServoLib_Iota*2)
-			ServoLib_GenerateScrewHolesOutline(servo_model);
+			ServoLib_GenerateScrewHolesOutline(servo_model, xcenter="body");
 	}
 }
 
@@ -147,14 +163,19 @@ module ServoLib_GenerateServo(servo_model, zcenter="axle top")
 // Generate the outline of the screw holes for the given servo model
 // This outline is simply a 2D representation of the holes and it will probably
 // need to be extruded to be useful
-module ServoLib_GenerateScrewHolesOutline(servo_model)
+module ServoLib_GenerateScrewHolesOutline(servo_model, xcenter="axle")
 {
 	body_width = ServoLib_BodyWidth(servo_model);
 	axle_offset = ServoLib_AxleOffset(servo_model);
 	hole_parameters = _ServoLib_RetrieveScrewHoleParameters(servo_model);
 
+	x_offset = 
+		xcenter == "body" ? 0 :
+		-axle_offset;
+	y_offset = 0;
+
 	// Offset the holes to match the motor body offset, which centers on the axle
-	translate([-body_width/2 + axle_offset, 0])
+	translate([x_offset, y_offset])
 	{
 		// Generate circles for each defined hole
 		for (i = [0: 1: len(hole_parameters) - 1])
