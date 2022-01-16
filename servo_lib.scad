@@ -102,7 +102,7 @@ function ServoLib_SplineType(servo_model) =
 //  A zcenter value of "wing top" will place the top of the wings on the XY plane
 //  A zcenter value of "wing bottom" will place the bottom of the wings on the XY plane
 //  A zcenter value of "body base" or "base" will place the entire servo above the XY plane
-module ServoLib_GenerateServo(servo_model, xcenter = "axle", zcenter="axle top")
+module ServoLib_GenerateServo(servo_model, xcenter, zcenter)
 {
 	// Gather motor dimensions
 	body_width = ServoLib_BodyWidth(servo_model);
@@ -125,8 +125,10 @@ module ServoLib_GenerateServo(servo_model, xcenter = "axle", zcenter="axle top")
 		zcenter == "axle base" || zcenter == "body top" ? axle_height :
 		zcenter == "wing top" ? axle_height + fore_height :
 		zcenter == "wing bottom" ? axle_height + fore_height + wing_height :
-		zcenter == "body base" || "base" ? axle_height + body_height :
+		zcenter == "body base" || zcenter == "base" ? axle_height + body_height :
 		0;
+	echo(zcenter=zcenter);
+	echo(z_offset=z_offset);
 
 	translate([x_offset, y_offset, z_offset])
 	difference()
@@ -163,7 +165,7 @@ module ServoLib_GenerateServo(servo_model, xcenter = "axle", zcenter="axle top")
 // Generate the outline of the screw holes for the given servo model
 // This outline is simply a 2D representation of the holes and it will probably
 // need to be extruded to be useful
-module ServoLib_GenerateScrewHolesOutline(servo_model, xcenter="axle")
+module ServoLib_GenerateScrewHolesOutline(servo_model, xcenter)
 {
 	body_width = ServoLib_BodyWidth(servo_model);
 	axle_offset = ServoLib_AxleOffset(servo_model);
