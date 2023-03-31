@@ -136,14 +136,16 @@ module ServoLib_GenerateServo(servo_model, xcenter, zcenter)
 			translate([0, 0, -axle_height])
 			{
 				// Model the servo body
-				translate([-body_width/2, -body_length/2, -body_height])
-					cube([body_width, body_length, body_height]);
+				translate([0, 0, -body_height])
+					linear_extrude(body_height)
+					ServoLib_GenerateBodyOutline(servo_model, xcenter="body");
 
 				// Model the servo wings
 				for (x_mirror = [0, 1])
-				mirror([x_mirror, 0, 0])
-				translate([body_width/2, -body_length/2, -fore_height - wing_height])
-					cube([(wing_width - body_width)/2, body_length, wing_height]);
+					mirror([x_mirror, 0, 0])
+					translate([0, 0, -fore_height - wing_height])
+					linear_extrude(wing_height)
+					ServoLib_GenerateWingOutline(servo_model, xcenter="body");
 			}
 
 			// Model the axle
@@ -192,6 +194,54 @@ module ServoLib_GenerateScrewHolesOutline(servo_model, xcenter)
 }
 
 
+
+// Generate the outline of the body of the given servo model
+//
+// The generated outline is centered according to the xcenter parameter
+// 
+// Horizontal centering (xcenter):
+// 	By default, the servo is centered, horizontally, on the axle
+//	An xcenter value of "body" will, instead, center on the middle of the body
+module ServoLib_GenerateBodyOutline(servo_model, xcenter)
+{
+	axle_offset = ServoLib_AxleOffset(servo_model);
+
+	x_offset = 
+		xcenter == "body" ? 0 :
+		-axle_offset;
+
+	body_width = ServoLib_BodyWidth(servo_model);
+	body_length = ServoLib_BodyLength(servo_model);
+
+	translate([x_offset, 0])
+		translate([-body_width/2, -body_length/2])
+		square([body_width, body_length]);
+}
+
+
+
+// Generate the outline of the wings of the given servo model
+//
+// The generated outline is centered according to the xcenter parameter
+// 
+// Horizontal centering (xcenter):
+// 	By default, the servo is centered, horizontally, on the axle
+//	An xcenter value of "body" will, instead, center on the middle of the body
+module ServoLib_GenerateWingOutline(servo_model, xcenter)
+{
+	axle_offset = ServoLib_AxleOffset(servo_model);
+
+	x_offset = 
+		xcenter == "body" ? 0 :
+		-axle_offset;
+
+	wing_width = ServoLib_WingWidth(servo_model);
+	body_length = ServoLib_BodyLength(servo_model);
+
+	translate([x_offset, 0])
+		translate([-wing_width/2, -body_length/2])
+		square([wing_width, body_length]);
+}
 
 
 
