@@ -25,7 +25,7 @@ As of version 2.0.0, the supported servo models are:
    The method accepts the following parameters:
    * `servo_model` - the name of the servo to model.
      
-   * `xcenter ` - specifies where the motor should be centered horizontally (defaults to "axle")
+   * `xcenter` - specifies where the motor should be centered horizontally (defaults to "axle")
      "axle" generates the motor centered on the axle.
      "body" generates the motor with the body centered along the origin.
 
@@ -36,6 +36,15 @@ As of version 2.0.0, the supported servo models are:
      "wing bottom" generates the motor with the bottom of the wings on the XY plane.
      "body base" or "base" generates the motor with the entire servo above the XY plane.
 
+### ServoLib_GenerateBodyOutline(servo_model, xcenter)
+   This method generates an outline of the body of the selected servo.
+
+   The method accepts the following parameters:
+   * `servo_model` - the name of the servo to model
+
+   * `xcenter` - specifies where the motor should be centered horizontally (defaults to "axle")
+     "axle" generates the motor centered on the axle.
+     "body" generates the motor with the body centered along the origin.
 ### ServoLib_GenerateScrewHolesOutline(servo_model)
    Generates a 2D hole pattern for the servo's mounting screw holes.
    This pattern can be extruded to create mounting screw holes in your model.
